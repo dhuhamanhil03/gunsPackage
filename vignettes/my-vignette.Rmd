@@ -1,0 +1,43 @@
+---
+title: "BIOS524FP"
+author: "Dhuha Manhil"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(BIOS524FP)
+```
+
+This package can be used on almost any type of data. 
+It doesn't just have to be related to guns or violence, 
+rather it can be any data set that contains a wide variety 
+of variables. The functions in this package have a general 
+purpose of conducting various statistical analyses. 
+They should be used to help form comparisons and conclusions 
+about the data being studied. Most of the visual functions in 
+this package are used to create various visualizations that 
+includes bar graphs, histograms, scatter plots, and box plots. 
+Some of the other functions in this package deal with statistical 
+functions, such as linear regression and correlation. This package 
+and its functions will be used on the R data set ToothGrowth.
+
+The summary function was used here to summarize the data set, ToothGrowth.
+```{r}
+summaryToothGrowth <- summarizeFunction(ToothGrowth)
+```
+
+Here we can see the summary of the data set that includes simple statistical concepts.
+```{r}
+print(summaryToothGrowth)
+```
