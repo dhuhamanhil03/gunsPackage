@@ -4,7 +4,7 @@
 \alias{readingInData}
 \title{Reads in a .xlsx file}
 \usage{
-readingInData(dataFile)
+readingInData(file)
 }
 \arguments{
 \item{dataFile}{variable}

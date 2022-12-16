@@ -1,6 +1,7 @@
 ---
-title: "BIOS524FP"
+title: "gunsPackage"
 author: "Dhuha Manhil"
+date: "2022-12-06"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{my-vignette}
@@ -15,9 +16,33 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(BIOS524FP)
+```{r message = FALSE}
+library(gunsPackage)
+library(AER)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(scales)
 ```
+
+For this final project, I chose to perform statistical analyses on a 
+data set called 'Guns'. The data set takes information from 51 states 
+(including District of Columbia) and tracks their relevant data over 
+23 years, meaning in total there are 1,173 observations, 23 for each 
+state. The data was collected from a population of 100,000 in each state. 
+Furthermore, the data tracked over a 23 year period, from 1977 to 1999.
+
+There are 13 separate variables that will be used to form some 
+conclusions on gun violence and if more guns equals less crime. 
+I will be specifically focusing on the state of Virginia, but will 
+conduct some additional tests to see how Virginia compares with 
+another state on the West Coast.
+
+I chose this specific data set because of my frustration when watching
+the news in the United States and seeing more and more shootings 
+take place. I would like to see how different gun violence/crime 
+was from 1977 to 1999 and compare it to now, seeing if it was less or more.
 
 This package can be used on almost any type of data. 
 It doesn't just have to be related to guns or violence, 
@@ -29,15 +54,82 @@ about the data being studied. Most of the visual functions in
 this package are used to create various visualizations that 
 includes bar graphs, histograms, scatter plots, and box plots. 
 Some of the other functions in this package deal with statistical 
-functions, such as linear regression and correlation. This package 
-and its functions will be used on the R data set ToothGrowth.
+functions, such as linear regression and correlation.
 
-The summary function was used here to summarize the data set, ToothGrowth.
+Reading in the Guns data set.
 ```{r}
-summaryToothGrowth <- summarizeFunction(ToothGrowth)
+setwd("~/Desktop/gunsPackage/data")
+file = "Guns.xlsx"
+gunsDataSet <- readingInData(file)
 ```
 
-Here we can see the summary of the data set that includes simple statistical concepts.
+The summary function was used here to summarize the data set.
 ```{r}
-print(summaryToothGrowth)
+summaryGuns <- summarizeFunction(gunsDataSet)
+```
+
+Creating and printing a subset to contain only Virginia data.
+```{r}
+virginiaData <- subset(gunsDataSet, stateid == 46, 
+                select = c(year, vio, mur, rob, incarc_rate, pb1064, 
+                pw1064, pm1029, pop, avginc, density, stateid, shall))
+print(virginiaData)
+```
+
+When we run this code below, we can see a summary of the 14
+variables that are in the Virginia data set. We can specifically 
+focus on the vio, mur, and rob variables, as they can show us 
+some descriptive statistics. We can see that the average for vio
+is higher than the average for both mur and rob, which can signify
+the severity of the level of violence that Virginia endured from 
+the years 1977 to 1999.
+```{r}
+summarizeFunction(virginiaData)
+```
+
+Creating a subset of just Virginia Years.
+```{r}
+virginiaYears <- subset(virginiaData, select = c(year))
+print(virginiaYears)
+```
+
+Using the bar plot function to produce a graph of the years vs.
+the violence crime rate in Virginia.
+```{r}
+bargraphPlot(virginiaYears, virginiaData$vio, "Violence Crime Rate", 
+             "Violence Crime Rate vs Years in the State of Virginia")
+```
+
+Creating a new variable that contains the sum of all
+crime in Virginia (violence, robbery, and murder).
+```{r}
+virginiaData$totalCrime <- virginiaData$vio + virginiaData$rob + virginiaData$mur
+```
+
+Producing a histogram plot to show frequency of the total
+Virginia crime rate.
+```{r}
+histogramPlot(virginiaData, virginiaData$totalCrime, 
+"Total Crime Rate of Murders, Violence, and Robbery", "Frequency", 
+"Histogram of Total Crime Rates")
+```
+
+Making a scatter plot of the total crime in Virginia vs 
+the tncarceration rate.
+```{r}
+scatterPlot(virginiaData, virginiaData$totalCrime, virginiaData$incarc_rate, "Total Crime",
+                "Incarceration Rate", "Total Crime vs Incarceration Rate")
+```
+
+Changing the graphics parameters to a window of one row
+and two columns of plots.
+```{r}
+par(mfrow = c(1,2))
+```
+
+Plotting a box plot to show the total crime in Virginia
+based on if there was a shall law that year.
+```{r}
+boxPlot(virginiaData, virginiaData$shall == 1, virginiaData$totalCrime, "Shall Law", "Total Crime",
+        "Total Crime vs Shall Law")
 ```
