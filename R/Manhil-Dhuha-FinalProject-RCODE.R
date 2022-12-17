@@ -3,7 +3,7 @@
 #' @export
 #' @import AER
 #' @import gdata
-#' @import readxl
+#' @import read_excel
 #' @param dataFile variable
 #' @examples
 #' readingInData(dataFile = "Guns.xlsx")
